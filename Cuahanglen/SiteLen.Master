@@ -1,0 +1,129 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="SiteLen.master.cs" Inherits="Cuahanglen.SiteLen" %>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiệm Len Sợi - Dụng Cụ Đan Móc Handmade</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Gắn duy nhất file style.css bạn vừa tạo trong thư mục Content -->
+    <link runat="server" href="~/Content/style.css" rel="stylesheet" type="text/css" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <!-- TOP ANNOUNCEMENT BAR -->
+        <div class="top-bar">
+            <span>🌸 Tiệm Len Sợi - Miễn phí giao hàng cho đơn từ 250.000₫ | Hotline: 098. 144. 16 17</span>
+        </div>
+
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-container">
+                <a href='<%= ResolveUrl("~/TrangChu.aspx") %>' class="logo">
+                    <span class="logo-icon">🧶</span>
+                    <div class="logo-text">
+                        <h2>TIỆM LEN SỢI</h2>
+                        <small>Handmade & Craft Supplies</small>
+                    </div>
+                </a>
+
+                <!-- THANH TÌM KIẾM -->
+                <div class="header-search">
+                    <asp:TextBox ID="txtTimKiem" runat="server" placeholder="Tìm len Milk Cotton, kim móc, thú bông..."></asp:TextBox>
+                    <button type="submit" id="btnTimKiem" runat="server" onserverclick="btnTimKiem_Click">🔍</button>
+                </div>
+
+                <!-- KHU VỰC PHÂN QUYỀN TÀI KHOẢN & GIỎ HÀNG -->
+                <div class="header-actions">
+                    <!-- Chỉ hiện khi đăng nhập vai trò Admin -->
+                    <asp:HyperLink ID="lnkAdmin" runat="server" NavigateUrl="~/Admin/QuanLySanPham.aspx" CssClass="action-item admin-btn-header" Visible="false">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Quản trị Shop</span>
+                    </asp:HyperLink>
+
+                    <!-- Khi CHƯA đăng nhập -->
+                    <asp:Panel ID="pnlChuaDangNhap" runat="server">
+                        <asp:HyperLink ID="lnkDangNhap" runat="server" NavigateUrl="~/DangNhap.aspx" CssClass="action-item account-btn">
+                            <span class="icon">👤</span>
+                            <span class="text">Đăng nhập</span>
+                        </asp:HyperLink>
+                    </asp:Panel>
+
+                    <!-- Khi ĐÃ đăng nhập -->
+                    <asp:Panel ID="pnlDaDangNhap" runat="server" Visible="false" style="display:flex; align-items:center; gap:8px;">
+                        <asp:HyperLink ID="lnkHoSo" runat="server" NavigateUrl="~/TaiKhoan.aspx" CssClass="action-item account-btn">
+                            <span class="icon">👤</span>
+                            <asp:Label ID="lblTenNguoiDung" runat="server" CssClass="text"></asp:Label>
+                            <asp:Label ID="lblVaiTro" runat="server" CssClass="role-badge"></asp:Label>
+                        </asp:HyperLink>
+                        <asp:LinkButton ID="btnDangXuat" runat="server" OnClick="btnDangXuat_Click" CssClass="action-item" style="color:#dc2626;" ToolTip="Đăng xuất">
+                            🚪
+                        </asp:LinkButton>
+                    </asp:Panel>
+
+                    <!-- Nút Giỏ hàng -->
+                    <asp:HyperLink ID="lnkGioHang" runat="server" NavigateUrl="~/GioHang.aspx" CssClass="action-item cart-btn">
+                        <span class="icon">🛒</span>
+                        <span class="text">Giỏ hàng</span>
+                        <asp:Label ID="lblSoLuongGio" runat="server" CssClass="badge" Text="0"></asp:Label>
+                    </asp:HyperLink>
+                </div>
+            </div>
+
+            <!-- MENU DANH MỤC (KHỚP VỚI MÃ DANH MỤC TRONG SQL) -->
+            <nav class="main-nav">
+                <div class="nav-container">
+                    <ul class="nav-list">
+                        <li><a href='<%= ResolveUrl("~/TrangChu.aspx") %>'>TRANG CHỦ</a></li>
+                        <li><a href='<%= ResolveUrl("~/TrangChu.aspx?dm=DM01") %>'>🧶 LEN SỢI CÁC LOẠI</a></li>
+                        <li><a href='<%= ResolveUrl("~/TrangChu.aspx?dm=DM02") %>'>🪝 KIM ĐAN & KIM MÓC</a></li>
+                        <li><a href='<%= ResolveUrl("~/TrangChu.aspx?dm=DM03") %>'>🧸 PHỤ KIỆN THÚ BÔNG</a></li>
+                        <li><a href='<%= ResolveUrl("~/TrangChu.aspx?dm=DM04") %>'>💐 SẢN PHẨM THÀNH PHẨM</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- NỘI DUNG RIÊNG CỦA TỪNG TRANG CON SẼ NẰM Ở ĐÂY -->
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>TIỆM LEN SỢI</h3>
+                    <p>Chuyên cung cấp len sợi, dụng cụ đan móc và đồ handmade cao cấp.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+                    <ul>
+                        <li><a href="#">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Bảng màu len đầy đủ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>LIÊN HỆ</h4>
+                    <p>📍 Địa chỉ: Cao Lãnh, Đồng Tháp</p>
+                    <p>📞 Hotline: 098. 144. 16 17</p>
+                    <p>✉️ Email: cskh@tiemlensoi.vn</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 Tiệm Len Sợi. All rights reserved.
+            </div>
+        </footer>
+
+    </form>
+</body>
+</html>
