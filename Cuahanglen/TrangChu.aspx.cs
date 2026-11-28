@@ -38,7 +38,23 @@ namespace Cuahanglen
                 query = query.Where(sp => sp.TenSanPham.Contains(tuKhoa));
                 lblTieuDe.Text = "Kết quả tìm kiếm: \"" + tuKhoa + "\"";
             }
-
+            // Lọc theo khoảng giá trên URL (VD: ?gia=duoi50)
+            string khoangGia = Request.QueryString["gia"];
+            if (khoangGia == "duoi50")
+            {
+                query = query.Where(sp => sp.GiaBan < 50000);
+                lblTieuDe.Text = "Sản phẩm dưới 50,000₫";
+            }
+            else if (khoangGia == "50den200")
+            {
+                query = query.Where(sp => sp.GiaBan >= 50000 && sp.GiaBan <= 200000);
+                lblTieuDe.Text = "Sản phẩm từ 50,000₫ đến 200,000₫";
+            }
+            else if (khoangGia == "tren200")
+            {
+                query = query.Where(sp => sp.GiaBan > 200000);
+                lblTieuDe.Text = "Sản phẩm trên 200,000₫";
+            }
             // 3. Sắp xếp theo giá
             if (ddlSapXep.SelectedValue == "asc")
                 query = query.OrderBy(sp => sp.GiaBan);
@@ -59,9 +75,15 @@ namespace Cuahanglen
 
         protected void btnThemGio_Click(object sender, EventArgs e)
         {
+            // Kiểm tra: Chưa đăng nhập HOẶC không phải vai trò Khách hàng -> đẩy sang trang Đăng nhập
+            if (Session["TenDangNhap"] == null || Session["VaiTro"] == null || Session["VaiTro"].ToString() != "KhachHang")
+            {
+                Response.Redirect("~/DangNhap.aspx?yeucau=khachhang");
+                return;
+            }
+
             LinkButton btn = (LinkButton)sender;
             string maSP = btn.CommandArgument.Trim();
-            // Chuyển sang trang Giỏ hàng kèm mã sản phẩm (ta sẽ tạo GioHang.aspx ở bước kế tiếp)
             Response.Redirect("~/GioHang.aspx?add=" + maSP);
         }
     }

@@ -60,15 +60,22 @@
 
                     <!-- Khi ĐÃ đăng nhập -->
                     <asp:Panel ID="pnlDaDangNhap" runat="server" Visible="false" style="display:flex; align-items:center; gap:8px;">
-                        <asp:HyperLink ID="lnkHoSo" runat="server" NavigateUrl="~/TaiKhoan.aspx" CssClass="action-item account-btn">
+                        <asp:HyperLink ID="lnkHoSo" runat="server" NavigateUrl="javascript:void(0);" CssClass="action-item account-btn">
                             <span class="icon">👤</span>
                             <asp:Label ID="lblTenNguoiDung" runat="server" CssClass="text"></asp:Label>
                             <asp:Label ID="lblVaiTro" runat="server" CssClass="role-badge"></asp:Label>
                         </asp:HyperLink>
-                        <asp:LinkButton ID="btnDangXuat" runat="server" OnClick="btnDangXuat_Click" CssClass="action-item" style="color:#dc2626;" ToolTip="Đăng xuất">
-                            🚪
-                        </asp:LinkButton>
-                    </asp:Panel>
+
+                    <!-- THÊM NÚT ĐƠN HÀNG CỦA TÔI Ở ĐÂY -->
+                    <asp:HyperLink ID="hlDonHangCuaToi" runat="server" NavigateUrl="~/LichSuDonHang.aspx" CssClass="action-item" Visible="false">
+                        <span class="icon">📦</span>
+                        <span class="text">Đơn hàng</span>
+                    </asp:HyperLink>
+
+                    <asp:LinkButton ID="btnDangXuat" runat="server" OnClick="btnDangXuat_Click" CssClass="action-item" style="color:#dc2626;" ToolTip="Đăng xuất">
+                        🚪
+                    </asp:LinkButton>
+                </asp:Panel>
 
                     <!-- Nút Giỏ hàng -->
                     <asp:HyperLink ID="lnkGioHang" runat="server" NavigateUrl="~/GioHang.aspx" CssClass="action-item cart-btn">

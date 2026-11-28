@@ -1,0 +1,119 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="Cuahanglen.Admin.Admin" %>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Trị Hệ Thống - Tiệm Len Sợi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', sans-serif; }
+        body { background: #fdf2f8; color: #1f2937; }
+        .admin-layout { display: flex; min-height: 100vh; }
+
+        /* SIDEBAR BÊN TRÁI */
+        .admin-sidebar {
+            width: 250px; background: #831843; color: #fff;
+            display: flex; flex-direction: column; padding: 20px 16px; position: fixed; top: 0; bottom: 0; left: 0;
+        }
+        .admin-logo { text-align: center; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.18); margin-bottom: 18px; }
+        .admin-logo h2 { font-size: 18px; letter-spacing: 0.5px; }
+        .admin-logo small { color: #fbcfe8; font-size: 12px; }
+        .admin-menu { list-style: none; flex: 1; }
+        .admin-menu li { margin-bottom: 8px; }
+        .admin-menu a {
+            display: block; padding: 11px 14px; border-radius: 8px; color: #fce7f3;
+            text-decoration: none; font-size: 14px; font-weight: 500; transition: 0.2s;
+        }
+        .admin-menu a:hover { background: rgba(255,255,255,0.16); color: #fff; }
+        .admin-footer-btn {
+            display: block; text-align: center; padding: 10px; border-radius: 8px;
+            background: #be185d; color: #fff; text-decoration: none; font-weight: 600; font-size: 13.5px; margin-top: 8px;
+        }
+        .admin-footer-btn:hover { background: #9d174d; }
+
+        /* NỘI DUNG BÊN PHẢI */
+        .admin-main { margin-left: 250px; flex: 1; display: flex; flex-direction: column; }
+        .admin-topbar {
+            background: #fff; padding: 14px 28px; border-bottom: 1px solid #f3e4ec;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .admin-topbar h3 { color: #9d174d; font-size: 16px; }
+        .admin-user { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+        .badge-role { background: #fce7f3; color: #be185d; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 12px; }
+        .admin-content { padding: 24px 28px; }
+
+        /* CARD & FORM DÙNG CHUNG CHO CÁC TRANG QUẢN LÝ */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 22px; }
+        .stat-card { background: #fff; padding: 18px 20px; border-radius: 12px; border: 1px solid #f3e4ec; }
+        .stat-card small { color: #6b7280; font-size: 13px; }
+        .stat-card h2 { color: #be185d; margin-top: 6px; font-size: 22px; }
+
+        .card-box { background: #fff; padding: 22px; border-radius: 12px; border: 1px solid #f3e4ec; margin-bottom: 22px; }
+        .card-box h3 { color: #9d174d; margin-bottom: 16px; font-size: 16px; }
+        .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .field-group { display: flex; flex-direction: column; gap: 5px; }
+        .field-group label { font-size: 13px; font-weight: 600; color: #374151; }
+        .field-group input[type="text"], .field-group input[type="number"], .field-group select, .field-group textarea {
+            padding: 9px 11px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13.5px; outline: none;
+        }
+        .field-group input:focus, .field-group select:focus { border-color: #be185d; }
+
+        .btn-bar { margin-top: 16px; display: flex; gap: 10px; }
+        .btn-primary { background: #be185d; color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-primary:hover { background: #9d174d; }
+        .btn-warning { background: #d97706; color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-secondary { background: #6b7280; color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-danger { display: inline-block; white-space: nowrap; background: #dc2626; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; text-decoration: none; }
+        .btn-edit { display: inline-block; white-space: nowrap; background: #2563eb; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; text-decoration: none; }
+
+        .gv-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+        .gv-table th { background: #fdf2f8; color: #9d174d; padding: 10px; text-align: left; border-bottom: 2px solid #fbcfe8; }
+        .gv-table td { padding: 10px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="admin-layout">
+            <!-- SIDEBAR -->
+            <aside class="admin-sidebar">
+                <div class="admin-logo">
+                    <h2>🧶 TIỆM LEN SỢI</h2>
+                    <small>Khu vực Quản trị (Admin)</small>
+                </div>
+
+                <ul class="admin-menu">
+                    <li><a href='<%= ResolveUrl("~/Admin/QuanLySanPham.aspx") %>'>📦 Quản lý Sản phẩm</a></li>
+                    <li><a href='<%= ResolveUrl("~/Admin/QuanLyDonHang.aspx") %>'>🧾 Quản lý Đơn hàng</a></li>
+                    <li><a href='<%= ResolveUrl("~/Admin/QuanLyNhaCungCap.aspx") %>'>🏭 Quản lý Nhà cung cấp</a></li>
+                    <li><a href='<%= ResolveUrl("~/Admin/QuanLyKhachHang.aspx") %>'>👤 Quản lý Khách hàng</a></li>
+                </ul>
+
+                <a href='<%= ResolveUrl("~/TrangChu.aspx") %>' class="admin-footer-btn" style="background:rgba(255,255,255,0.15);">
+                    🛍️ Xem trang bán hàng
+                </a>
+                <asp:LinkButton ID="btnDangXuat" runat="server" OnClick="btnDangXuat_Click" CssClass="admin-footer-btn">
+                    🚪 Đăng xuất
+                </asp:LinkButton>
+            </aside>
+
+            <!-- MAIN AREA -->
+            <div class="admin-main">
+                <header class="admin-topbar">
+                    <h3>HỆ THỐNG QUẢN LÝ CỬA HÀNG LEN</h3>
+                    <div class="admin-user">
+                        <span>Xin chào, <b><asp:Label ID="lblAdminName" runat="server"></asp:Label></b></span>
+                        <asp:Label ID="lblRole" runat="server" CssClass="badge-role"></asp:Label>
+                    </div>
+                </header>
+
+                <main class="admin-content">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+                </main>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
